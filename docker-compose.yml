@@ -10,18 +10,18 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
-      - SERVERURL=${PUBLIC_DNS} # Dynamic DNS
-      - SERVERPORT=${SERVER_PORT}
-      - PEERS=${CLIENT_NUMBER} # Number of clients
-      - PEERDNS=${PEERDNS} # DNS to use
-      - INTERNAL_SUBNET=${INTERNAL_SUBNET} # WireGuard network
-      - ALLOWEDIPS=${ALLOWEDIPS} # Enruted network
+      - SERVERURL=${{secrets.PUBLIC_DNS}} # Dynamic DNS
+      - SERVERPORT=${{secrets.SERVER_PORT}}
+      - PEERS=${{secrets.CLIENT_NUMBER}} # Number of clients
+      - PEERDNS=${{secrets.PEERDNS}} # DNS to use
+      - INTERNAL_SUBNET=${{secrets.INTERNAL_SUBNET}} # WireGuard network
+      - ALLOWEDIPS=${{secrets.ALLOWEDIPS}} # Enruted network
       - LOG_CONFS=false # Do not save config to logs
     volumes:
       - ~/volumes/wireguard:/config
       - /lib/modules:/lib/modules
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}/udp
+      - ${{secrets.SERVER_PORT}}:${{secrets.SERVER_PORT}}/udp
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
