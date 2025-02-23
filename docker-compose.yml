@@ -1,0 +1,27 @@
+version: "2.1"
+services:
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - SERVERURL=${PUBLIC_DNS} # Dynamic DNS
+      - SERVERPORT=${SERVER_PORT}
+      - PEERS=${CLIENT_NUMBER} # Number of clients
+      - PEERDNS=${PEERDNS} # DNS to use
+      - INTERNAL_SUBNET=${INTERNAL_SUBNET} # WireGuard network
+      - ALLOWEDIPS=${ALLOWEDIPS} # Enruted network
+      - LOG_CONFS=false # Do not save config to logs
+    volumes:
+      - ~/volumes/wireguard:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
