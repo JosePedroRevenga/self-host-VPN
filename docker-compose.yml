@@ -10,6 +10,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
+      - LANG=en
       - SERVERURL=${{secrets.PUBLIC_DNS}} # Dynamic DNS
       - SERVERPORT=${{secrets.SERVER_PORT}}
       - PEERS=${{secrets.CLIENT_NUMBER}} # Number of clients
@@ -22,6 +23,8 @@ services:
       - /lib/modules:/lib/modules
     ports:
       - ${{secrets.SERVER_PORT}}:${{secrets.SERVER_PORT}}/udp
+      - ${{secrets.SERVER_PORT_TCP}}:${{secrets.SERVER_PORT_TCP}}/tcp
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv4.ip_forward=1
     restart: unless-stopped
